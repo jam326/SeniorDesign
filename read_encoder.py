@@ -4,10 +4,10 @@ Created on Sat Feb 15 22:25:52 2020
 
 @author: Jenna
 """
-'''
+
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
-'''
+
 
 #Set variables
 motorPosition = 0
@@ -17,7 +17,7 @@ encoderStatus = 0
 Pin_motor_encoderA = 13
 Pin_motor_encoderB = 6
 
-#create function for edge detect
+#create callback function
 def updateMotorPosition(motorPosition,encoderStatus):
     #bitwise shift to left by  1 bit
     encoderStatus <<= 1
@@ -25,7 +25,7 @@ def updateMotorPosition(motorPosition,encoderStatus):
     encoderStatus |= GPIO.input(Pin_motor_encoderA)
     #bitwise shift to left by 1 bit
     encoderStatus <<= 1
-    #read channel B and put that value into the 
+    #read channel B and put that value into the the rightmost bit of encoderStatus
     encoderStatus |= GPIO.input(Pin_motor_encoderB)
     #truncate encoder status to rightmost 4 bits
     encoderStatus &= 15
@@ -36,14 +36,14 @@ def updateMotorPosition(motorPosition,encoderStatus):
         #otherwise subtract one (since function is only called if something changes)
         motorPosition -= 1
 
-#Set up -run once
-GPIO.setup(Pin_motor_encoderA,GPIO.IN,pull_up_down = GPIO.PUD_UP) #change to GPIO.IN
-GPIO.setup(Pin_motor_encoderB,GPIO.IN,pull_up_down = GPIO.PUD_UP) #change to GPIO.IN
+#Set up pins
+GPIO.setup(Pin_motor_encoderA,GPIO.IN,pull_up_down = GPIO.PUD_UP) 
+GPIO.setup(Pin_motor_encoderB,GPIO.IN,pull_up_down = GPIO.PUD_UP) 
 
 
 #interrupt for encoder pins
-GPIO.add_event_detect(Pin_motor_encoderA,BOTH,updateMotorPosition) #add GPIO.BOTH, add callback = 
-GPIO.add_event_detect(Pin_motor_encoderB,BOTH,updateMotorPosition) #add GPIO.BOTH, add callback = 
+GPIO.add_event_detect(Pin_motor_encoderA,GPIO.BOTH,callback = updateMotorPosition) 
+GPIO.add_event_detect(Pin_motor_encoderB,GPIO.BOTH,callback = updateMotorPosition)
 
 try:
     while True:
