@@ -4,10 +4,10 @@ Created on Sat Feb 15 22:25:52 2020
 
 @author: Jenna
 """
-
+'''
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
-
+'''
 
 #Set variables
 motorPosition = 0
@@ -18,9 +18,7 @@ Pin_motor_encoderA = 13
 Pin_motor_encoderB = 6
 
 #create function for edge detect
-def updateMotorPosition():
-    global motorPosition
-    global encoderStatus
+def updateMotorPosition(motorPosition,encoderStatus):
     #bitwise shift to left by  1 bit
     encoderStatus <<= 1
     #read channel A and put that value into the rightmost bit of encoderStatus
@@ -49,6 +47,7 @@ GPIO.add_event_detect(Pin_motor_encoderB,BOTH,updateMotorPosition) #add GPIO.BOT
 
 try:
     while True:
+        updateMotorPosition(motorPosition,encoderStatus)
         print(motorPosition)
 except KeyboardInterrupt:
         GPIO.cleanup()
