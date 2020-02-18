@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 
 class EncoderReader:
-    Position = 0
+    position = 0
     encoderStatus = 0
 
     def __init__(self, a, b):
@@ -22,10 +22,10 @@ class EncoderReader:
         self.encoderStatus &= 15
         # if encoder status matches pattern for counting up by one, add one to motorPosition
         if self.encoderStatus == 2 or self.encoderStatus == 4 or self.encoderStatus == 11 or self.encoderStatus == 13:
-            self.Position += 1
+            self.position += 1
         else:
             # otherwise subtract one (since function is only called if something changes)
-            self.Position -= 1
+            self.position -= 1
 
 
 PinMotorEncoderA = 5
