@@ -1,6 +1,7 @@
 
 # ------------------------------------------CLASS FOR MOTOR--------------------------------------------
 from datetime import datetime
+import RPi.GPIO as GPIO
 
 class Motor:
     position = 0               # [encoder counts]
@@ -65,7 +66,9 @@ class Motor:
                 (now - self.prev_vel_comp_time).microseconds > self.min_vel_comp_time:
             #calculate velocity
             self.velocity = (self.position - self.prevPosition)*100000/(now - self.prev_vel_comp_time).microseconds
+            print(self.prevPosition,self.position)
             print(self.velocity)
+            
             # remember this position and time for next iteration
             self.prevPosition = self.position
             self.prev_vel_comp_time = now

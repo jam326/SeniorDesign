@@ -1,14 +1,30 @@
+import RPi.GPIO as GPIO
 from helper import Motor
-from datetime import datetime
 import time
-motor = Motor(1,2,3,4,5)
-time_limit = .2
-motor.position = 0
-count = 0
-start_time = datetime.now()
-while (datetime.now() - start_time).total_seconds() < time_limit:
-    motor.speed_computation()
-    motor.position = count
-    count += 1
-    #time.sleep(.00000001)
-    print(motor.position)
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+pinA = 20
+pinB = 21
+#need to fix for BCM
+pinPWM = 8
+pinDIR1 = 10
+pinDIR2 = 12
+
+motor = Motor(pinA,pinB,pinPWM,pinDIR1,pinDIR2)
+motor = Motor(pinA,pinB,pinPWM,pinDIR1,pinDIR2)
+GPIO.setup(pinA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(pinB, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.add_event_detect(pinA, GPIO.BOTH, callback=motor.updateposition)  # add GPIO.BOTH, add callback =
+GPIO.add_event_detect(pinB, GPIO.BOTH, callback=motor.updateposition)
+
+try:
+    while True:
+        motor.speed_computation()
+        time.sleep(.05)
+except KeyboardInterrupt:
+    pass
+
+GPIO.cleanup()
+        
