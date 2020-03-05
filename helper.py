@@ -1,6 +1,6 @@
 
 # ------------------------------------------CLASS FOR MOTOR--------------------------------------------
-GPIO = Gpio()
+from datetime import datetime
 
 class Motor:
     position = 0               # [encoder counts]

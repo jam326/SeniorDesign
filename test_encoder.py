@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
-import time
 GPIO.setmode(GPIO.BOARD)
 from helper import Motor
+
 
 pinA = 38
 pinB = 40
@@ -16,5 +16,5 @@ GPIO.add_event_detect(pinB, GPIO.BOTH, callback = motor.updateposition)  # add G
 try:
     while True:
         print(motor.position)
-except: KeyboardInterrupt
+except KeyboardInterrupt:
     pass
